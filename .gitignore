@@ -5,3 +5,6 @@ __pycache__/
 
 .tox/
 .pytest_cache/
+.cache/
+.coverage
+htmlcov/

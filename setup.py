@@ -1,31 +1,31 @@
-import re
 import setuptools
+import securedrop_api
 
-with open('securedrop_api/__init__.py') as f:
-    version = re.search(r"__version__ = '(.*?)'", f.read()).group(1)
+from os import path
 
-with open('README.md', 'r') as fh:
-    long_description = fh.read()
+base_dir = path.abspath(path.dirname(__file__))
+
+with open(path.join(base_dir, 'README.md')) as f:
+    long_description = f.read()
 
 setuptools.setup(
     name='securedrop-api',
-    version=version,
+    version=securedrop_api.__version__,
     author='heartsucker',
     author_email='heartsucker@autistici.org',
     description='SecureDrop API client',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    #url=TODO
     package_dir={'securedrop_api': 'securedrop_api'},
     packages=['securedrop_api'],
     platforms='any',
     python_requires='>=3.4',
     install_requires=[
-        'requests',
+        'json-serde',
     ],
     classifiers=(
-	'Development Status :: 2 Pre-Alpha',
-	'Intended Audience :: Developers',
+        'Development Status :: 2 Pre-Alpha',
+        'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -33,5 +33,6 @@ setuptools.setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ),
 )
