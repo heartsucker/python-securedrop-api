@@ -21,6 +21,7 @@ setuptools.setup(
     platforms='any',
     python_requires='>=3.4',
     install_requires=[
+        'requests',
         'json-serde',
     ],
     classifiers=(
