@@ -1,12 +1,11 @@
 from datetime import datetime
 
-from json_serde import JsonSerde, String, Integer, IsoDateTime, List, Boolean, Nested
+from json_serde import JsonSerde, String, Integer, IsoDateTime, List, Boolean, Nested, Uuid
 
 
 class Source(JsonSerde):
 
-    source_id = Integer()
-    filesystem_id = String()
+    uuid = Uuid()
     journalist_designation = String()
     last_updated = IsoDateTime()
     flagged = Boolean()

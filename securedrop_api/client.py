@@ -1,5 +1,7 @@
 import requests
 
+from typing import Union
+
 from . import __version__, API_V1
 from .auth import Authentication
 from .data import Sources, Source, Submissions, Submission, Reply, User
@@ -70,12 +72,12 @@ class Client:
 
         return Sources.from_json(resp_json)
 
-    def source(self, filesystem_id: str) -> Source:
+    def source(self, uuid: Union[UUID, str]) -> Source:
         '''Return a single source.
-           Correponds to ``GET /api/v1/sources/<str:filesystem_id>``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``GET /api/v1/sources/<uuid:uuid>``
+           :param uuid: The source's ``uuid``
         '''
-        resp = self.__request('GET', 'sources/{}'.format(filesystem_id))
+        resp = self.__request('GET', 'sources/{}'.format(uuid))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
@@ -86,12 +88,12 @@ class Client:
 
         return Source.from_json(source)
 
-    def source_submissions(self, filesystem_id: str) -> Submissions:
+    def source_submissions(self, uuid: Union[UUID, str]) -> Submissions:
         '''Return on object containing information about all submission for a given source.
-           Correponds to ``GET /api/v1/sources/<str:filesystem_id>/submissions``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``GET /api/v1/sources/<uuid:uuid>/submissions``
+           :param uuid: The source's ``uuid``
         '''
-        resp = self.__request('GET', 'sources/{}/submissions'.format(filesystem_id))
+        resp = self.__request('GET', 'sources/{}/submissions'.format(uuid))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}'.format(resp.status_code, resp.text))
 
@@ -102,14 +104,14 @@ class Client:
 
         return Submissions.from_json(resp_json)
 
-    def source_submission(self, filesystem_id: str, submission_id: int) -> Submission:
+    def source_submission(self, uuid: Union[UUID, str], submission_id: int) -> Submission:
         '''Return on object containing information about all submission for a given source.
-           Correponds to ``GET /api/v1/sources/<str:filesystem_id>/submissions/<int:submission_id>``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``GET /api/v1/sources/<uuid:uuid>/submissions/<int:submission_id>``
+           :param uuid: The source's ``uuid``
            :param submission_id: The submissions's id
         '''
         resp = self.__request('GET',
-                              'sources/{}/submissions/{}'.format(filesystem_id, submission_id))
+                              'sources/{}/submissions/{}'.format(uuid, submission_id))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
@@ -120,57 +122,57 @@ class Client:
 
         return Submission.from_json(source)
 
-    def delete_source_submission(self, filesystem_id: str, submission_id: int) -> None:
+    def delete_source_submission(self, uuid: Union[UUID, str], submission_id: int) -> None:
         '''Delete a source's submission.
            Correponds to
-           ``DELETE /api/v1/sources/<str:filesystem_id>/submissions/<int:submission_id>``
-           :param filesystem_id: The source's ``filesystem_id``
+           ``DELETE /api/v1/sources/<uuid:uuid>/submissions/<int:submission_id>``
+           :param uuid: The source's ``uuid``
            :param submission_id: The submissions's id
         '''
         resp = self.__request('GET',
-                              'sources/{}/submissions/{}'.format(filesystem_id, submission_id))
+                              'sources/{}/submissions/{}'.format(uuid, submission_id))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
-    def delete_source(self, filesystem_id: str) -> None:
+    def delete_source(self, uuid: Union[UUID, str]) -> None:
         '''Delete a source and all their submissions.
-           Correponds to ``DELETE /api/v1/sources/<str:filesystem_id>``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``DELETE /api/v1/sources/<uuid:uuid>``
+           :param uuid: The source's ``uuid``
         '''
-        resp = self.__request('GET', 'sources/{}'.format(filesystem_id))
+        resp = self.__request('GET', 'sources/{}'.format(uuid))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
-    def reply_to_source(self, filesystem_id: str, reply: Reply) -> None:
+    def reply_to_source(self, uuid: Union[UUID, str], reply: Reply) -> None:
         '''Send a reply to a source.
-           Correponds to ``POST /api/v1/sources/<str:filesystem_id>/reply``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``POST /api/v1/sources/<uuid:uuid>/reply``
+           :param uuid: The source's ``uuid``
            :param reply: A reply object.
         '''
         if not isinstance(reply, Reply):
             raise TypeError('Can only send `Reply` objects.')
 
         resp = self.__request('POST',
-                              'sources/{}/reply'.format(filesystem_id),
+                              'sources/{}/reply'.format(uuid),
                               json=reply.to_json())
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
-    def star_source(self, filesystem_id: str) -> None:
+    def star_source(self, uuid: Union[UUID, str]) -> None:
         '''Add a star to a source.
-           Correponds to ``POST /api/v1/sources/<str:filesystem_id>/star``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``POST /api/v1/sources/<uuid:uuid>/star``
+           :param uuid: The source's ``uuid``
         '''
-        resp = self.__request('POST', 'sources/{}/star'.format(filesystem_id))
+        resp = self.__request('POST', 'sources/{}/star'.format(uuid))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
-    def unstar_source(self, filesystem_id: str) -> None:
+    def unstar_source(self, uuid: Union[UUID, str]) -> None:
         '''Remote a star from a source.
-           Correponds to ``DELETE /api/v1/sources/<str:filesystem_id>/star``
-           :param filesystem_id: The source's ``filesystem_id``
+           Correponds to ``DELETE /api/v1/sources/<uuid:uuid>/star``
+           :param uuid: The source's ``uuid``
         '''
-        resp = self.__request('POST', 'sources/{}/star'.format(filesystem_id))
+        resp = self.__request('POST', 'sources/{}/star'.format(uuid))
         if resp.status_code != 200:
             raise ApiException('Unexpected response: {} {}', resp.status_code, resp.text)
 
